@@ -85,7 +85,59 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Numéro WhatsApp</label>
+                    <label>Numéro WhatsApp</label><script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.x.x/firebase-app.js";
+    import { getFirestore, collection, addDoc, Timestamp } from "https://www.gstatic.com/firebasejs/10.x.x/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyAvJjnFBGp9iNsN_xE6SU43SDbYrEPq8H",
+        authDomain: "guinee-boncoin.firebaseapp.com",
+        projectId: "guinee-boncoin",
+        storageBucket: "guinee-boncoin.appspot.com",
+        messagingSenderId: "453767404568",
+        appId: "1:453767404568:web:24eeee45ec916d86b80f7"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Remplace l'ancienne fonction locale par la version Firestore + VIP 7 jours
+    window.publierArticle = async function(event) {
+        event.preventDefault();
+        
+        const titre = document.getElementById("p-titre").value;
+        const prix = Number(document.getElementById("p-prix").value);
+        const ville = document.getElementById("p-ville").value;
+        const tel = document.getElementById("p-tel").value;
+        const isVip = document.getElementById("p-vip").checked;
+
+        let expirationDate = null;
+        if (isVip) {
+            const expiresAt = new Date();
+            expiresAt.setDate(expiresAt.getDate() + 7); // 7 jours d'expiration VIP
+            expirationDate = Timestamp.fromDate(expiresAt);
+        }
+
+        try {
+            await addDoc(collection(db, "annonces"), {
+                titre,
+                prix,
+                ville,
+                tel,
+                isVip,
+                createdAt: Timestamp.now(),
+                expiresAt: expirationDate
+            });
+
+            alert("Annonce publiée avec succès sur Firebase !");
+            location.reload();
+        } catch (e) {
+            console.error("Erreur : ", e);
+            alert("Erreur lors de la publication.");
+        }
+    };
+</script>
+
                     <input type="tel" id="p-tel" placeholder="224620000000" required>
                 </div>
 
