@@ -6,22 +6,20 @@
     <title>Guinée Bon Coin - Inscription</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        * { box-sizing: border-box; }
         body {
-            margin: 0;
-            padding: 20px;
             font-family: Arial, sans-serif;
-            background-color: #faf8f5;
+            background-color: #f4f4f9;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            height: 100vh;
+            margin: 0;
         }
         .card {
             background: #ffffff;
             padding: 30px 20px;
             border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             border-top: 5px solid #ce1126;
             border-bottom: 5px solid #009460;
             width: 100%;
@@ -29,7 +27,7 @@
             text-align: center;
         }
         h2 { color: #333; margin-bottom: 5px; }
-        p.subtitle { color: #666; font-size: 14px; margin-bottom: 20px; }
+        .subtitle { color: #666; font-size: 14px; margin-bottom: 20px; }
         .input-group {
             margin-bottom: 15px;
             text-align: left;
@@ -47,6 +45,7 @@
             border: 1px solid #ccc;
             border-radius: 8px;
             font-size: 16px;
+            box-sizing: border-box;
         }
         .btn-submit {
             width: 100%;
@@ -60,7 +59,7 @@
             cursor: pointer;
             margin-top: 10px;
         }
-        .btn-submit:hover { background-color: #007a4d; }
+        .btn-submit:hover { background-color: #007a4e; }
         #error-message {
             margin-top: 15px;
             font-size: 14px;
@@ -73,7 +72,7 @@
 <div class="card">
     <h2>Guinée Bon Coin</h2>
     <p class="subtitle">Achetez et vendez en toute simplicité</p>
-    
+
     <form id="signup-form">
         <div class="input-group">
             <label for="nom">Nom d'utilisateur</label>
@@ -89,29 +88,26 @@
         </div>
         <div class="input-group">
             <label for="mot_de_passe">Mot de passe</label>
-            <input type="password" id="mot_de_passe" required placeholder="••••••••">
+            <input type="password" id="mot_de_passe" required placeholder="********">
         </div>
         <button type="submit" class="btn-submit">Créer mon compte</button>
     </form>
 
     <div id="error-message"></div>
-</div>
-
-<script>
-    // URL corrigée avec le nom exact de ton projet Supabase
-    const SUPABASE_URL = 'https://fantomekems-ship-it.supabase.co';
-    const SUPABASE_ANON_KEY = 'Sb_publishable_12Iq5_yhPziBBV3CdxjgqA_AzUOskcd';
+</div><script>
+    const SUPABASE_URL = 'https://ylrqruogetpbvyfditjt.supabase.co';
+    const SUPABASE_ANON_KEY = 'Sb_publishable_12Iq5_zhPii08V3CdbjgqA_AnD5kCd';
 
     const { createClient } = supabase;
     const _supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     document.getElementById('signup-form').addEventListener('submit', async function(e) {
         e.preventDefault();
-        
+
         const nom = document.getElementById('nom').value.trim();
         const telephone = document.getElementById('telephone').value.trim();
         const email = document.getElementById('email').value.trim();
-        const mot_de_passe = document.getElementById('mot_de_passe.value') ? document.getElementById('mot_de_passe').value.trim() : document.getElementById('mot_de_passe').value.trim();
+        const mot_de_passe = document.getElementById('mot_de_passe').value.trim();
         const errorDiv = document.getElementById('error-message');
         errorDiv.textContent = "";
 
@@ -128,11 +124,11 @@
             errorDiv.textContent = "Inscription réussie ! Redirection...";
 
             setTimeout(() => {
-                window.location.href = 'accueil.html';
+                window.location.href = "accueil.html";
             }, 1000);
-            
+
         } catch (err) {
-            console.error("Erreur d'inscription :", err.message);
+            console.error("Erreur d'inscription :", err);
             errorDiv.style.color = "#ce1126";
             errorDiv.textContent = "Erreur : " + (err.message || "Impossible de s'inscrire.");
         }
@@ -141,3 +137,4 @@
 
 </body>
 </html>
+
