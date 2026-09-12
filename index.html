@@ -112,14 +112,21 @@
                 .from('utilisateurs')
                 .insert([{ nom: nom, telephone: telephone }])
 
-            if (error) {
+                        if (error) {
                 console.error("Erreur:", error)
                 messageDiv.style.color = 'red'
                 messageDiv.textContent = 'Erreur : ' + error.message
             } else {
                 messageDiv.style.color = 'green'
-                messageDiv.textContent = 'Inscription réussie ! Bienvenue sur Guinée Bon Coin.'
+                messageDiv.textContent = 'Inscription réussie ! Redirection...'
                 form.reset()
+                
+                // Redirection automatique vers la page d'accueil après 1 seconde
+                setTimeout(() => {
+                    window.location.href = 'accueil.html'
+                }, 1000)
+            }
+
             }
         })
     </script>
