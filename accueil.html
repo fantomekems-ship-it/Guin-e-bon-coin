@@ -62,16 +62,16 @@
     </div>
 
     <script>
-        // Remplace par tes propres clés Supabase (les mêmes que dans ton index.html)
+        // Tes vraies clés Supabase
         const SUPABASE_URL = 'https://ylrqruogetpbvyfditjt.supabase.co'
-        const SUPABASE_ANON_KEY = 'TA_CLE_ANON_SUPABASE' 
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlscXJ1b2dldHBidnlmZGl0anQiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTczODE0MzE4NCwiZXhwIjoyMDUzNzE5MTg0fQ.YOUR_SECRET_KEY_PART' // (Mets ici ta longue clé complète exacte de ton index.html)
 
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 
         async function chargerAnnonces() {
             const conteneur = document.getElementById('liste-annonces')
             
-            // On récupère les données de la table utilisateurs (ou de ta future table d'annonces)
+            // On récupère les données de la table utilisateurs
             const { data, error } = await _supabase
                 .from('utilisateurs')
                 .select('*')
@@ -101,7 +101,7 @@
             })
         }
 
-        // Fonction pour bloquer l'interaction si l'utilisateur veut acheter/vendre
+        // Fonction pour bloquer l'interaction si l'utilisateur veut acheter/vendre sans compte
         function verifierInteraction() {
             alert("Vous devez être connecté pour effectuer cette action !");
             window.location.href = 'index.html';
