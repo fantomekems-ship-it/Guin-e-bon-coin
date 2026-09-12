@@ -3,250 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Guinée Bon Coin - Inscription</title>
+    <title>Guinée Bon Coin - La référence des petites annonces</title>
+    <!-- Utilisation de la version officielle et moderne du SDK Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f6f9;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-        }
-        .form-container {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 400px;
-        }
-        h2 { color: #ff6600; text-align: center; }
-        .input-group {
-            margin-bottom: 15px;
-        }
-        label { display: block; margin-bottom: 5px; font-weight: bold; }
-        input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
-        }
-        .optionnel { font-weight: normal; color: #777; font-size: 0.9em; }
-        .btn {
-            background-color: #ff6600;
-            color: white;
-            border: none;
-            width: 100%;
-            padding: 12px;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            margin-top: 5px;
-        }
-        .btn:hover { background-color: #e55b00; }
-        
-        .separator {
-            text-align: center;
-            margin: 20px 0;
-            position: relative;
-            color: #666;
-            font-size: 14px;
-        }
-        .separator::before, .separator::after {
-            content: "";
-            position: absolute;
-            top: 50%;
-            width: 40%;
-            height: 1px;
-            background: #ddd;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .form-container { background: #ffffff; padding: 40px 30px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); width: 100%; max-width: 420px; border-top: 6px solid #ce1126; }
+        .brand-header { text-align: center; margin-bottom: 25px; }
+        .brand-header h1 { color: #111; font-size: 26px; font-weight: 700; }
+        .brand-header h1 span { color: #fcd116; text-shadow: 0 1px 1px rgba(0,0,0,0.1); }
+        .brand-header h1 .green { color: #009460; }
+        .brand-header p { color: #666; font-size: 14px; margin-top: 5px; }
+        .input-group { margin-bottom: 18px; }
+        label { display: block; margin-bottom: 6px; font-weight: 600; color: #333; font-size: 14px; }
+        input { width: 100%; padding: 12px 14px; border: 1.5px solid #e1e8ed; border-radius: 8px; font-size: 15px; transition: all 0.3s ease; background-color: #fafbfc; }
+        input:focus { border-color: #009460; background-color: #fff; outline: none; box-shadow: 0 0 0 4px rgba(0, 148, 96, 0.1); }
+        .btn-primary { background: linear-gradient(135deg, #009460 0%, #007a4d 100%); color: white; border: none; width: 100%; padding: 14px; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.3s ease, transform 0.1s ease; margin-top: 10px; }
+        .btn-primary:hover { background: linear-gradient(135deg, #007a4d 0%, #00613d 100%); }
+        .btn-primary:active { transform: scale(0.98); }
+        .separator { text-align: center; margin: 20px 0; position: relative; color: #888; font-size: 13px; font-weight: 500; }
+        .separator::before, .separator::after { content: ""; position: absolute; top: 50%; width: 38%; height: 1px; background: #e1e8ed; }
         .separator::before { left: 0; }
         .separator::after { right: 0; }
-
-        .btn-social {
-            width: 100%;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 10px;
-            background: white;
-        }
-        .btn-google { color: #db4437; }
-        .btn-google:hover { background: #fdf2f2; }
-        .btn-facebook { color: #4267B2; }
-        .btn-facebook:hover { background: #f0f4f9; }
-
-        #message { text-align: center; margin-top: 15px; font-weight: bold; }
+        .btn-social { width: 100%; padding: 12px; border-radius: 8px; border: 1.5px solid #e1e8ed; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 10px; background: white; color: #333; transition: background 0.2s, border-color 0.2s; }
+        .btn-social:hover { background: #f89a050d; border-color: #cbd5e1; }
+        #message { text-align: center; margin-top: 15px; font-weight: 600; font-size: 14px; }
     </style>
 </head>
 <body>
-
     <div class="form-container">
-        <h2>Guinée Bon Coin</h2>
-        
-        <!-- Formulaire classique -->
+        <div class="brand-header">
+            <h1>Guinée <span style="color:#d97706;">Bon</span> <span class="green">Coin</span></h1>
+            <p>Achetez et vendez en toute simplicité</p>
+        </div>
+
         <form id="inscriptionForm">
             <div class="input-group">
-                <label for="nom">Nom d'utilisateur :</label>
-                <input type="text" id="nom" required placeholder="Ex: Mamadou">
+                <label for="nom">Nom d'utilisateur</label>
+                <input type="text" id="nom" required placeholder="Ex: Mamadou Diallo">
             </div>
-
             <div class="input-group">
-                <label for="telephone">Numéro de téléphone :</label>
+                <label for="telephone">Numéro de téléphone</label>
                 <input type="tel" id="telephone" required placeholder="Ex: +224 620 00 00 00">
             </div>
-
             <div class="input-group">
-                <label for="email">Adresse Email <span class="optionnel">(Facultatif)</span> :</label>
-                <input type="email" id="email" placeholder="Ex: mamadou@gmail.com">
+                <label for="email">Adresse Email</label>
+                <!-- Email requis pour l'authentification standard par Supabase Auth -->
+                <input type="email" id="email" required placeholder="Ex: mamadou@gmail.com">
             </div>
-
             <div class="input-group">
-                <label for="password">Mot de passe :</label>
-                <input type="password" id="password" required placeholder="Votre mot de passe secret">
+                <label for="password">Mot de passe (6 caractères min.)</label>
+                <input type="password" id="password" required minlength="6" placeholder="••••••••••••">
             </div>
-
-            <button type="submit" class="btn" id="submitBtn">S'inscrire</button>
+            <button type="submit" class="btn-primary" id="submitBtn">Créer mon compte</button>
         </form>
 
         <div class="separator">OU</div>
 
-        <!-- Boutons Sociaux -->
-        <button type="button" class="btn-social btn-google" onclick="connexionSociale('Google')">
-            <span>🌐</span> Continuer avec Google
+        <button type="button" class="btn-social" onclick="connexionSociale('google')">
+            <!-- SVG Google -->
+            <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.8 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.4l3.7 2.9C6.2 7.1 8.9 5 12 5z"/><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z"/><path fill="#FBBC05" d="M5.3 14.3c-.2-.7-.4-1.5-.4-2.3s.2-1.6.4-2.3L1.6 6.8C.6 8.8 0 11 0 13.4s.6 4.6 1.6 6.6l3.7-2.9z"/><path fill="#34A853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.1-6.7-5.3L1.6 15c1.9 3.8 5.8 8 10.4 8z"/></svg> Continuer avec Google
         </button>
-        <button type="button" class="btn-social btn-facebook" onclick="connexionSociale('Facebook')">
-            <span>📘</span> Continuer avec Facebook
+        <button type="button" class="btn-social" onclick="connexionSociale('facebook')">
+            <!-- SVG Facebook -->
+            <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#1877F2" d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg> Continuer avec Facebook
         </button>
 
         <div id="message"></div>
     </div>
 
     <script>
-        const SUPABASE_URL = 'https://ylrqruogetpbvyfditjt.supabase.co'
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlscXJ1b2dldHBidnlmZGl0anQiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTczODE0MzE4NCwiZXhwIjoyMDUzNzE5MTg0fQ.YOUR_SECRET_KEY_PART' // Mets ta vraie clé Supabase exacte ici
-        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+        // Remplacer avec vos vrais identifiants Supabase (Clé Anon)
+        const SUPABASE_URL = 'https://ylrqruogetpbvyfditjt.supabase.co';
+        const SUPABASE_ANON_KEY = 'VOTRE_VERITABLE_CLE_ANON_ICI'; 
+        
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const form = document.getElementById('inscriptionForm');
+        const messageDiv = document.getElementById('message');
 
-        const form = document.getElementById('inscriptionForm')
-        const messageDiv = document.getElementById('message')
-
-        // Gestion du blocage des 3 tentatives (2 heures)
-        function verifierBlocage() {
-            const tempsBlocageFin = localStorage.getItem('blocage_fin')
-            if (tempsBlocageFin) {
-                const maintenant = new Date().getTime()
-                if (maintenant < tempsBlocageFin) {
-                    const minutesRestantes = Math.ceil((tempsBlocageFin - maintenant) / (1000 * 60))
-                    form.style.display = 'none'
-                    messageDiv.style.color = 'red'
-                    messageDiv.textContent = `Trop d'échecs. Accès bloqué. Réessayez dans ${minutesRestantes} minute(s).`
-                    return true
-                } else {
-                    localStorage.removeItem('blocage_fin')
-                    localStorage.removeItem('tentatives')
-                }
-            }
-            return false
-        }
-
-        verifierBlocage()
-
-        // Inscription classique
         form.addEventListener('submit', async (e) => {
-            e.preventDefault()
+            e.preventDefault();
+            messageDiv.textContent = "";
 
-            if (verifierBlocage()) return
+            const nom = document.getElementById('nom').value.trim();
+            const telephone = document.getElementById('telephone').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
 
-            const nom = document.getElementById('nom').value.trim()
-            const telephone = document.getElementById('telephone').value.trim()
-            const email = document.getElementById('email').value.trim() || null
-            const password = document.getElementById('password').value.trim()
-
-            const telephoneNettoye = telephone.replace(/\s+/g, '')
+            // Validation rapide du numéro
+            const telephoneNettoye = telephone.replace(/\s+/g, '');
             if (telephoneNettoye.length < 9) {
-                gererEchec("Erreur : Numéro de téléphone invalide (9 chiffres minimum).")
-                return
+                afficherMessage("Erreur : Numéro de téléphone invalide (9 chiffres minimum).", '#ce1126');
+                return;
             }
 
-            const { error } = await _supabase
-                .from('utilisateurs')
-                .insert([{ nom: nom, telephone: telephone, email: email, mot_de_passe: password }])
+            // INSCRIPTION SÉCURISÉE via Supabase Auth
+            // Le mot de passe sera automatiquement haché par Supabase avant stockage
+            const { data, error } = await _supabase.auth.signUp({
+                email: email,
+                password: password,
+                options: {
+                    data: {
+                        display_name: nom,
+                        phone_number: telephoneNettoye
+                    }
+                }
+            });
 
             if (error) {
-                console.error("Erreur:", error)
-                gererEchec("Erreur lors de l'inscription : " + error.message)
+                afficherMessage("Erreur lors de l'inscription : " + error.message, '#ce1126');
             } else {
-                succesInscription()
+                afficherMessage('Inscription réussie ! Un email de confirmation vous a été envoyé.', '#009460');
+                form.reset();
+                // Redirection optionnelle après confirmation ou délai
             }
-        })
+        });
 
-        // Connexion sociale (Google / Facebook)
-        async function connexionSociale(plateforme) {
-            if (verifierBlocage()) return
-
-            const nomSocial = prompt(`Entrez votre nom pour la connexion ${plateforme} :`)
-            if (!nomSocial) return
-
-            const telephoneSocial = prompt("Entrez votre numéro de téléphone (ex: +224...) :")
-            if (!telephoneSocial) return
-
-            const telNettoye = telephoneSocial.replace(/\s+/g, '')
-            if (telNettoye.length < 9) {
-                alert("Numéro de téléphone invalide (9 chiffres minimum).")
-                gererEchec("Numéro social invalide")
-                return
-            }
-
-            const { error } = await _supabase
-                .from('utilisateurs')
-                .insert([{ nom: `${nomSocial} (${plateforme})`, telephone: telephoneSocial, mot_de_passe: 'SOCIAL_LOGIN' }])
+        // CONNEXION SOCIALE AUTHENTIQUE ET SÉCURISÉE
+        async function connexionSociale(provider) {
+            const { data, error } = await _supabase.auth.signInWithOAuth({
+                provider: provider,
+                options: {
+                    redirectTo: window.location.origin + '/accueil.html' // URL de redirection après connexion
+                }
+            });
 
             if (error) {
-                alert("Erreur lors de la connexion : " + error.message)
-            } else {
-                succesInscription()
+                alert("Erreur lors de la connexion sociale : " + error.message);
             }
         }
 
-        function succesInscription() {
-            localStorage.removeItem('tentatives')
-            localStorage.removeItem('blocage_fin')
-
-            messageDiv.style.color = 'green'
-            messageDiv.textContent = 'Connexion réussie ! Redirection...'
-            form.reset()
-            
-            setTimeout(() => {
-                window.location.href = 'accueil.html'
-            }, 1000)
-        }
-
-        function gererEchec(messageTexte) {
-            messageDiv.style.color = 'red'
-            messageDiv.textContent = messageTexte
-
-            let tentatives = parseInt(localStorage.getItem('tentatives') || '0') + 1
-            localStorage.setItem('tentatives', tentatives)
-
-            if (tentatives >= 3) {
-                const deuxHeures = 2 * 60 * 60 * 1000
-                const tempsFin = new Date().getTime() + deuxHeures
-                localStorage.setItem('blocage_fin', tempsFin)
-                
-                alert("Trop de tentatives incorrectes. Votre accès est bloqué pendant 2 heures.")
-                location.reload()
-            }
+        function afficherMessage(texte, couleur) {
+            messageDiv.style.color = couleur;
+            messageDiv.textContent = texte;
         }
     </script>
 </body>
