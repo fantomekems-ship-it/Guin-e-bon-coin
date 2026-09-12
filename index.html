@@ -3,141 +3,186 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Guinée Bon Coin - La référence des petites annonces</title>
-    <!-- Utilisation de la version officielle et moderne du SDK Supabase -->
+    <title>Guinée Bon Coin - Inscription</title>
+    <!-- Importation de Supabase JS Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
-        .form-container { background: #ffffff; padding: 40px 30px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); width: 100%; max-width: 420px; border-top: 6px solid #ce1126; }
-        .brand-header { text-align: center; margin-bottom: 25px; }
-        .brand-header h1 { color: #111; font-size: 26px; font-weight: 700; }
-        .brand-header h1 span { color: #fcd116; text-shadow: 0 1px 1px rgba(0,0,0,0.1); }
-        .brand-header h1 .green { color: #009460; }
-        .brand-header p { color: #666; font-size: 14px; margin-top: 5px; }
-        .input-group { margin-bottom: 18px; }
-        label { display: block; margin-bottom: 6px; font-weight: 600; color: #333; font-size: 14px; }
-        input { width: 100%; padding: 12px 14px; border: 1.5px solid #e1e8ed; border-radius: 8px; font-size: 15px; transition: all 0.3s ease; background-color: #fafbfc; }
-        input:focus { border-color: #009460; background-color: #fff; outline: none; box-shadow: 0 0 0 4px rgba(0, 148, 96, 0.1); }
-        .btn-primary { background: linear-gradient(135deg, #009460 0%, #007a4d 100%); color: white; border: none; width: 100%; padding: 14px; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.3s ease, transform 0.1s ease; margin-top: 10px; }
-        .btn-primary:hover { background: linear-gradient(135deg, #007a4d 0%, #00613d 100%); }
-        .btn-primary:active { transform: scale(0.98); }
-        .separator { text-align: center; margin: 20px 0; position: relative; color: #888; font-size: 13px; font-weight: 500; }
-        .separator::before, .separator::after { content: ""; position: absolute; top: 50%; width: 38%; height: 1px; background: #e1e8ed; }
-        .separator::before { left: 0; }
-        .separator::after { right: 0; }
-        .btn-social { width: 100%; padding: 12px; border-radius: 8px; border: 1.5px solid #e1e8ed; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 10px; background: white; color: #333; transition: background 0.2s, border-color 0.2s; }
-        .btn-social:hover { background: #f89a050d; border-color: #cbd5e1; }
-        #message { text-align: center; margin-top: 15px; font-weight: 600; font-size: 14px; }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #faf8f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+        }
+        .card {
+            background: #ffffff;
+            padding: 30px 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border-top: 5px solid #e74c3c;
+            border-bottom: 5px solid #27ae60;
+            text-align: center;
+        }
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+            font-size: 14px;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        .btn-submit {
+            width: 100%;
+            padding: 12px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .btn-submit:hover {
+            background-color: #219653;
+        }
+        .social-login {
+            margin-top: 20px;
+        }
+        .btn-social {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            background: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .btn-google { color: #db4437; border-color: #db4437; }
+        .btn-facebook { color: #3b5998; border-color: #3b5998; }
+        #error-message {
+            margin-top: 15px;
+            font-size: 14px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
-    <div class="form-container">
-        <div class="brand-header">
-            <h1>Guinée <span style="color:#d97706;">Bon</span> <span class="green">Coin</span></h1>
-            <p>Achetez et vendez en toute simplicité</p>
-        </div>
 
-        <form id="inscriptionForm">
+<div class="container">
+    <div class="card">
+        <h2>Guinée Bon Coin</h2>
+        <form id="signup-form">
             <div class="input-group">
                 <label for="nom">Nom d'utilisateur</label>
-                <input type="text" id="nom" required placeholder="Ex: Mamadou Diallo">
+                <input type="text" id="nom" required placeholder="Votre nom">
             </div>
             <div class="input-group">
                 <label for="telephone">Numéro de téléphone</label>
-                <input type="tel" id="telephone" required placeholder="Ex: +224 620 00 00 00">
+                <input type="tel" id="telephone" required placeholder="Ex: +224...">
             </div>
             <div class="input-group">
-                <label for="email">Adresse Email</label>
-                <!-- Email requis pour l'authentification standard par Supabase Auth -->
-                <input type="email" id="email" required placeholder="Ex: mamadou@gmail.com">
+                <label for="email">Adresse Email (Facultatif)</label>
+                <input type="email" id="email" placeholder="votre@email.com">
             </div>
             <div class="input-group">
-                <label for="password">Mot de passe (6 caractères min.)</label>
-                <input type="password" id="password" required minlength="6" placeholder="••••••••••••">
+                <label for="mot_de_passe">Mot de passe</label>
+                <input type="password" id="mot_de_passe" required placeholder="••••••••">
             </div>
-            <button type="submit" class="btn-primary" id="submitBtn">Créer mon compte</button>
+            <button type="submit" class="btn-submit">S'inscrire</button>
         </form>
 
-        <div class="separator">OU</div>
+        <div class="social-login">
+            <button class="btn-social btn-google" id="btn-google" type="button">Continuer avec Google</button>
+            <button class="btn-social btn-facebook" id="btn-facebook" type="button">Continuer avec Facebook</button>
+        </div>
 
-        <button type="button" class="btn-social" onclick="connexionSociale('google')">
-            <!-- SVG Google -->
-            <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.8 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.4l3.7 2.9C6.2 7.1 8.9 5 12 5z"/><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z"/><path fill="#FBBC05" d="M5.3 14.3c-.2-.7-.4-1.5-.4-2.3s.2-1.6.4-2.3L1.6 6.8C.6 8.8 0 11 0 13.4s.6 4.6 1.6 6.6l3.7-2.9z"/><path fill="#34A853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.1-6.7-5.3L1.6 15c1.9 3.8 5.8 8 10.4 8z"/></svg> Continuer avec Google
-        </button>
-        <button type="button" class="btn-social" onclick="connexionSociale('facebook')">
-            <!-- SVG Facebook -->
-            <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#1877F2" d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg> Continuer avec Facebook
-        </button>
-
-        <div id="message"></div>
+        <div id="error-message"></div>
     </div>
+</div>
 
-    <script>
-        // Remplacer avec vos vrais identifiants Supabase (Clé Anon)
-        const SUPABASE_URL = 'https://ylrqruogetpbvyfditjt.supabase.co';
-        const SUPABASE_ANON_KEY = 'VOTRE_VERITABLE_CLE_ANON_ICI'; 
+<script>
+    // Configuration Supabase avec ta clé intégrée
+    const SUPABASE_URL = 'https://fantomekems.supabase.co';
+    const SUPABASE_ANON_KEY = 'Sb_publishable_12Iq5_yhPziBBV3CdxjgqA_AzUOskcd';
+
+    const { createClient } = supabase;
+    const _supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    document.getElementById('signup-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
         
-        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        const form = document.getElementById('inscriptionForm');
-        const messageDiv = document.getElementById('message');
+        const nom = document.getElementById('nom').value.trim();
+        const telephone = document.getElementById('telephone').value.trim();
+        const email = document.getElementById('email').value.trim() || null;
+        const mot_de_passe = document.getElementById('mot_de_passe').value.trim();
+        const errorDiv = document.getElementById('error-message');
+        errorDiv.textContent = "";
 
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            messageDiv.textContent = "";
-
-            const nom = document.getElementById('nom').value.trim();
-            const telephone = document.getElementById('telephone').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value;
-
-            // Validation rapide du numéro
-            const telephoneNettoye = telephone.replace(/\s+/g, '');
-            if (telephoneNettoye.length < 9) {
-                afficherMessage("Erreur : Numéro de téléphone invalide (9 chiffres minimum).", '#ce1126');
-                return;
-            }
-
-            // INSCRIPTION SÉCURISÉE via Supabase Auth
-            // Le mot de passe sera automatiquement haché par Supabase avant stockage
-            const { data, error } = await _supabase.auth.signUp({
-                email: email,
-                password: password,
-                options: {
-                    data: {
-                        display_name: nom,
-                        phone_number: telephoneNettoye
-                    }
-                }
-            });
+        try {
+            // Insertion dans la table 'utilisateurs'
+            const { data, error } = await _supabase
+                .from('utilisateurs')
+                .insert([{ nom, telephone, email, mot_de_passe }]);
 
             if (error) {
-                afficherMessage("Erreur lors de l'inscription : " + error.message, '#ce1126');
-            } else {
-                afficherMessage('Inscription réussie ! Un email de confirmation vous a été envoyé.', '#009460');
-                form.reset();
-                // Redirection optionnelle après confirmation ou délai
+                throw error;
             }
-        });
 
-        // CONNEXION SOCIALE AUTHENTIQUE ET SÉCURISÉE
-        async function connexionSociale(provider) {
-            const { data, error } = await _supabase.auth.signInWithOAuth({
-                provider: provider,
-                options: {
-                    redirectTo: window.location.origin + '/accueil.html' // URL de redirection après connexion
-                }
-            });
+            errorDiv.style.color = "green";
+            errorDiv.textContent = "Inscription réussie ! Redirection...";
 
-            if (error) {
-                alert("Erreur lors de la connexion sociale : " + error.message);
-            }
+            // Redirection vers la page d'accueil en cas de succès
+            setTimeout(() => {
+                window.location.href = 'accueil.html';
+            }, 1000);
+            
+        } catch (err) {
+            console.error("Erreur d'inscription :", err.message);
+            errorDiv.style.color = "#e74c3c";
+            errorDiv.textContent = "Erreur : " + (err.message || "Impossible de s'inscrire.");
         }
+    });
 
-        function afficherMessage(texte, couleur) {
-            messageDiv.style.color = couleur;
-            messageDiv.textContent = texte;
-        }
-    </script>
+    document.getElementById('btn-google').addEventListener('click', () => {
+        alert("La connexion Google sera effective une fois configurée dans Supabase Auth.");
+    });
+
+    document.getElementById('btn-facebook').addEventListener('click', () => {
+        alert("La connexion Facebook sera effective une fois configurée dans Supabase Auth.");
+    });
+</script>
+
 </body>
 </html>
