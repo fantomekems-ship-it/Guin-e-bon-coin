@@ -3,129 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Guinée Bon Coin - Petites annonces en Guinée</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Guinée Bon Coin - Inscription</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        h2 {
+            color: #ff6600;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #ff6600;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #e55c00;
+        }
+        #message {
+            text-align: center;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+    </style>
 </head>
-<body class="bg-gray-50 font-sans">
+<body>
 
-    <!-- En-tête / Barre de navigation -->
-    <header class="bg-white shadow-sm sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+    <div class="card">
+        <h2>Guinée Bon Coin</h2>
+        <form id="signupForm">
+            <div class="form-group">
+                <label for="nom">Nom complet :</label>
+                <input type="text" id="nom" required placeholder="Ex: Mamadou Diallo">
+            </div>
             
-            <!-- Logo et Nom -->
-            <a href="index.html" class="flex items-center gap-3">
-                <img src="Logo.png" alt="Logo Guinée bon coin" class="h-10 w-10 object-contain rounded-full shadow">
-                <span class="text-lg font-bold tracking-tight text-gray-900">
-                    Guinée <span class="text-red-600">bon</span> <span class="text-green-600">coin</span>
-                </span>
-            </a>
-
-            <!-- Boutons d'action (Connexion et Dépôt) -->
-            <div class="flex items-center gap-2">
-                <button onclick="openAuthModal()" class="text-gray-700 hover:text-green-600 text-sm font-medium px-3 py-2 transition">
-                    Connexion
-                </button>
-                <a href="#" class="bg-green-600 hover:bg-green-700 text-white text-sm font-medium px-4 py-2 rounded-lg shadow-sm transition">
-                    + Déposer
-                </a>
+            <div class="form-group">
+                <label for="telephone">Numéro de téléphone :</label>
+                <input type="tel" id="telephone" required placeholder="Ex: +224 620 00 00 00">
             </div>
 
-        </div>
-    </header>
-
-    <!-- Section principale -->
-    <main class="max-w-7xl mx-auto px-4 py-8">
-        <div class="text-center my-12">
-            <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">
-                Achetez et vendez en toute confiance en Guinée
-            </h1>
-            <p class="text-gray-600 max-w-xl mx-auto mb-8">
-                Trouvez les meilleures bonnes affaires près de chez vous : immobilier, véhicules, téléphones et bien plus encore.
-            </p>
-
-            <!-- Barre de recherche rapide -->
-            <div class="max-w-xl mx-auto bg-white p-2 rounded-xl shadow-md flex items-center border border-gray-200">
-                <input type="text" placeholder="Que recherchez-vous ?" class="w-full px-4 py-2 focus:outline-none text-gray-700 text-sm">
-                <button class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg font-medium text-sm transition">
-                    Rechercher
-                </button>
-            </div>
-        </div>
-    </main>
-
-    <!-- Fenêtre modale de Connexion / Inscription -->
-    <div id="authModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl relative">
-            
-            <!-- Bouton pour fermer -->
-            <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
-            
-            <div class="text-center mb-6">
-                <h2 class="text-2xl font-bold text-gray-900">Espace Membre</h2>
-                <p class="text-sm text-gray-500 mt-1">Connectez-vous avec votre numéro de téléphone</p>
-            </div>
-
-            <!-- Étape 1 : Demande du nom et numéro -->
-            <div id="stepPhone" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Votre Nom complet</label>
-                    <input type="text" id="userName" placeholder="Ex: Mamadou Diallo" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none text-sm">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Numéro de téléphone</label>
-                    <input type="tel" id="userPhone" placeholder="Ex: +224 620 00 00 00" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none text-sm">
-                </div>
-                <button onclick="sendOtpCode()" class="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-2.5 rounded-lg transition text-sm">
-                    Recevoir le code de vérification
-                </button>
-            </div>
-
-            <!-- Étape 2 : Saisie du Code OTP (Caché au début) -->
-            <div id="stepOtp" class="space-y-4 hidden">
-                <p class="text-xs text-gray-600 text-center">Un code à usage unique a été simulé et envoyé par SMS à votre numéro.</p>
-                <div>
-                    <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Entrez le code reçu</label>
-                    <input type="text" id="otpCode" placeholder="Ex: 1234" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-center tracking-widest text-lg font-bold focus:ring-2 focus:ring-green-500 focus:outline-none">
-                </div>
-                <button onclick="verifyOtpCode()" class="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-2.5 rounded-lg transition text-sm">
-                    Valider et se connecter
-                </button>
-            </div>
-
-        </div>
+            <button type="submit">S'inscrire</button>
+        </form>
+        <div id="message"></div>
     </div>
 
-    <!-- Script simple pour gérer l'ouverture et la fermeture de la modale -->
-    <script>
-        function openAuthModal() {
-            document.getElementById('authModal').classList.remove('hidden');
-        }
-        function closeAuthModal() {
-            document.getElementById('authModal').classList.add('hidden');
-        }
-        function sendOtpCode() {
-            const name = document.getElementById('userName').value;
-            const phone = document.getElementById('userPhone').value;
-            if(!name || !phone) {
-                alert("Veuillez remplir votre nom et votre numéro de téléphone.");
-                return;
-            }
-            // Passage à l'étape du code OTP
-            document.getElementById('stepPhone').classList.add('hidden');
-            document.getElementById('stepOtp').classList.remove('hidden');
-            alert("Code OTP envoyé ! (Pour le test, entrez n'importe quel code à 4 chiffres)");
-        }
-        function verifyOtpCode() {
-            alert("Connexion réussie ! Bienvenue sur Guinée Bon Coin.");
-            closeAuthModal();
-        }
-    </script>
+    <!-- Script de connexion Supabase -->
+    <script type="module">
+        import { createClient } from 'https://esm.sh/@supabase/supabase-js'
 
-    <!-- Pied de page -->
-    <footer class="bg-white border-t border-gray-200 mt-16 py-6 text-center text-sm text-gray-500">
-        &copy; 2026 Guinée Bon Coin. Tous droits réservés.
-    </footer>
+        // Tes identifiants Supabase configurés
+        const supabaseUrl = 'https://ylrqruogetpbvyfditjt.supabase.co'
+        const supabaseKey = 'sb_publishable_12Iq5_yhPziBBV3CdxjgqA_AzUOskcd'
+        const supabase = createClient(supabaseUrl, supabaseKey)
+
+        const form = document.getElementById('signupForm')
+        const messageDiv = document.getElementById('message')
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault()
+            
+            const nom = document.getElementById('nom').value
+            const telephone = document.getElementById('telephone').value
+
+            messageDiv.style.color = '#333'
+            messageDiv.textContent = 'Enregistrement en cours...'
+
+            const { data, error } = await supabase
+                .from('utilisateurs')
+                .insert([{ nom: nom, telephone: telephone }])
+
+            if (error) {
+                console.error("Erreur:", error)
+                messageDiv.style.color = 'red'
+                messageDiv.textContent = 'Erreur : ' + error.message
+            } else {
+                messageDiv.style.color = 'green'
+                messageDiv.textContent = 'Inscription réussie ! Bienvenue sur Guinée Bon Coin.'
+                form.reset()
+            }
+        })
+    </script>
 
 </body>
 </html>
