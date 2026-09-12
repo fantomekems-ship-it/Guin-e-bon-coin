@@ -4,36 +4,177 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Guinée Bon Coin - Inscription</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f6f9;
-            margin: 0;
-            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            margin: 0;
         }
-        .card {
+        .form-container {
             background: white;
             padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
             width: 100%;
             max-width: 400px;
         }
-        h2 {
-            color: #ff6600;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .form-group {
+        h2 { color: #ff6600; text-align: center; }
+        .input-group {
             margin-bottom: 15px;
         }
-        label {
-            display: block;
-            margin-bottom: 5px;
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .optionnel { font-weight: normal; color: #777; font-size: 0.9em; }
+        .btn {
+            background-color: #ff6600;
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 12px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .btn:hover { background-color: #e55b00; }
+        #message { text-align: center; margin-top: 15px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <h2>Guinée Bon Coin</h2>
+        <form id="inscriptionForm">
+            <div class="input-group">
+                <label for="nom">Nom d'utilisateur :</label>
+                <input type="text" id="nom" required placeholder="Ex: Mamadou">
+            </div>
+
+            <div class="input-group">
+                <label for="telephone">Numéro de téléphone :</label>
+                <input type="tel" id="telephone" required placeholder="Ex: +224 620 00 00 00">
+            </div>
+
+            <div class="input-group">
+                <label for="email">Adresse Email <span class="optionnel">(Facultatif)</span> :</label>
+                <input type="email" id="email" placeholder="Ex: mamadou@gmail.com">
+            </div>
+
+            <div class="input-group">
+                <label for="password">Mot de passe :</label>
+                <input type="password" id="password" required placeholder="Votre mot de passe secret">
+            </div>
+
+            <button type="submit" class="btn" id="submitBtn">S'inscrire</button>
+        </form>
+        <div id="message"></div>
+    </div>
+
+    <script>
+        const SUPABASE_URL = 'https://ylrqruogetpbvyfditjt.supabase.co'
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlscXJ1b2dldHBidnlmZGl0anQiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTczODE0MzE4NCwiZXhwIjoyMDUzNzE5MTg0fQ.YOUR_SECRET_KEY_PART' // Mets ta vraie clé Supabase exacte ici
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+
+        const form = document.getElementById('inscriptionForm')
+        const messageDiv = document.getElementById('message')
+        const submitBtn = document.getElementById('submitBtn')
+
+        // Gestion du blocage des 3 tentatives (2 heures)
+        function verifierBlocage() {
+            const tempsBlocageFin = localStorage.getItem('blocage_fin')
+            if (tempsBlocageFin) {
+                const maintenant = new Date().getTime()
+                if (maintenant < tempsBlocageFin) {
+                    const minutesRestantes = Math.ceil((tempsBlocageFin - maintenant) / (1000 * 60))
+                    form.style.display = 'none'
+                    messageDiv.style.color = 'red'
+                    messageDiv.textContent = `Trop d'échecs. Accès bloqué. Réessayez dans ${minutesRestantes} minute(s).`
+                    return true
+                } else {
+                    localStorage.removeItem('blocage_fin')
+                    localStorage.removeItem('tentatives')
+                }
+            }
+            return false
+        }
+
+        verifierBlocage()
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault()
+
+            if (verifierBlocage()) return
+
+            const nom = document.getElementById('nom').value.trim()
+            const telephone = document.getElementById('telephone').value.trim()
+            const email = document.getElementById('email').value.trim() || null // Si vide, envoie "null"
+            const password = document.getElementById('password').value.trim()
+
+            // Vérification stricte du numéro de téléphone (minimum 9 chiffres)
+            const telephoneNettoye = telephone.replace(/\s+/g, '')
+            if (telephoneNettoye.length < 9) {
+                gererEchec("Erreur : Numéro de téléphone invalide (9 chiffres minimum).")
+                return
+            }
+
+            // Envoi vers Supabase
+            const { data, error } = await _supabase
+                .from('utilisateurs')
+                .insert([
+                    { 
+                        nom: nom, 
+                        telephone: telephone, 
+                        email: email, 
+                        mot_de_passe: password 
+                    }
+                ])
+
+            if (error) {
+                console.error("Erreur:", error)
+                gererEchec("Erreur lors de l'inscription : " + error.message)
+            } else {
+                localStorage.removeItem('tentatives')
+                localStorage.removeItem('blocage_fin')
+
+                messageDiv.style.color = 'green'
+                messageDiv.textContent = 'Inscription réussie ! Redirection...'
+                form.reset()
+                
+                setTimeout(() => {
+                    window.location.href = 'accueil.html'
+                }, 1000)
+            }
+        })
+
+        function gererEchec(messageTexte) {
+            messageDiv.style.color = 'red'
+            messageDiv.textContent = messageTexte
+
+            let tentatives = parseInt(localStorage.getItem('tentatives') || '0') + 1
+            localStorage.setItem('tentatives', tentatives)
+
+            if (tentatives >= 3) {
+                const deuxHeures = 2 * 60 * 60 * 1000
+                const tempsFin = new Date().getTime() + deuxHeures
+                localStorage.setItem('blocage_fin', tempsFin)
+                
+                alert("Trop de tentatives incorrectes. Votre accès est bloqué pendant 2 heures.")
+                location.reload()
+            }
+        }
+    </script>
+</body>
+</html>
             font-weight: bold;
             color: #333;
         }
