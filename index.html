@@ -4,15 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Guinée Bon Coin - Inscription</title>
-    <!-- Importation de Supabase JS Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; }
         body {
             margin: 0;
-            padding: 0;
+            padding: 20px;
             font-family: Arial, sans-serif;
             background-color: #faf8f5;
             display: flex;
@@ -20,24 +17,19 @@
             align-items: center;
             min-height: 100vh;
         }
-        .container {
-            width: 100%;
-            max-width: 400px;
-            padding: 20px;
-        }
         .card {
             background: #ffffff;
             padding: 30px 20px;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            border-top: 5px solid #e74c3c;
-            border-bottom: 5px solid #27ae60;
+            border-top: 5px solid #ce1126;
+            border-bottom: 5px solid #009460;
+            width: 100%;
+            max-width: 400px;
             text-align: center;
         }
-        h2 {
-            color: #333;
-            margin-bottom: 20px;
-        }
+        h2 { color: #333; margin-bottom: 5px; }
+        p.subtitle { color: #666; font-size: 14px; margin-bottom: 20px; }
         .input-group {
             margin-bottom: 15px;
             text-align: left;
@@ -59,7 +51,7 @@
         .btn-submit {
             width: 100%;
             padding: 12px;
-            background-color: #27ae60;
+            background-color: #009460;
             color: white;
             border: none;
             border-radius: 8px;
@@ -68,29 +60,7 @@
             cursor: pointer;
             margin-top: 10px;
         }
-        .btn-submit:hover {
-            background-color: #219653;
-        }
-        .social-login {
-            margin-top: 20px;
-        }
-        .btn-social {
-            width: 100%;
-            padding: 10px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            background: white;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-        .btn-google { color: #db4437; border-color: #db4437; }
-        .btn-facebook { color: #3b5998; border-color: #3b5998; }
+        .btn-submit:hover { background-color: #007a4d; }
         #error-message {
             margin-top: 15px;
             font-size: 14px;
@@ -100,40 +70,35 @@
 </head>
 <body>
 
-<div class="container">
-    <div class="card">
-        <h2>Guinée Bon Coin</h2>
-        <form id="signup-form">
-            <div class="input-group">
-                <label for="nom">Nom d'utilisateur</label>
-                <input type="text" id="nom" required placeholder="Votre nom">
-            </div>
-            <div class="input-group">
-                <label for="telephone">Numéro de téléphone</label>
-                <input type="tel" id="telephone" required placeholder="Ex: +224...">
-            </div>
-            <div class="input-group">
-                <label for="email">Adresse Email (Facultatif)</label>
-                <input type="email" id="email" placeholder="votre@email.com">
-            </div>
-            <div class="input-group">
-                <label for="mot_de_passe">Mot de passe</label>
-                <input type="password" id="mot_de_passe" required placeholder="••••••••">
-            </div>
-            <button type="submit" class="btn-submit">S'inscrire</button>
-        </form>
-
-        <div class="social-login">
-            <button class="btn-social btn-google" id="btn-google" type="button">Continuer avec Google</button>
-            <button class="btn-social btn-facebook" id="btn-facebook" type="button">Continuer avec Facebook</button>
+<div class="card">
+    <h2>Guinée Bon Coin</h2>
+    <p class="subtitle">Achetez et vendez en toute simplicité</p>
+    
+    <form id="signup-form">
+        <div class="input-group">
+            <label for="nom">Nom d'utilisateur</label>
+            <input type="text" id="nom" required placeholder="Votre nom complet">
         </div>
+        <div class="input-group">
+            <label for="telephone">Numéro de téléphone</label>
+            <input type="tel" id="telephone" required placeholder="Ex: +224...">
+        </div>
+        <div class="input-group">
+            <label for="email">Adresse Email</label>
+            <input type="email" id="email" required placeholder="votre@email.com">
+        </div>
+        <div class="input-group">
+            <label for="mot_de_passe">Mot de passe</label>
+            <input type="password" id="mot_de_passe" required placeholder="••••••••">
+        </div>
+        <button type="submit" class="btn-submit">Créer mon compte</button>
+    </form>
 
-        <div id="error-message"></div>
-    </div>
+    <div id="error-message"></div>
 </div>
 
 <script>
-    // Configuration Supabase avec ta clé intégrée
+    // URL exacte de ton projet Supabase et ta nouvelle clé Publishable
     const SUPABASE_URL = 'https://fantomekems.supabase.co';
     const SUPABASE_ANON_KEY = 'Sb_publishable_12Iq5_yhPziBBV3CdxjgqA_AzUOskcd';
 
@@ -145,16 +110,15 @@
         
         const nom = document.getElementById('nom').value.trim();
         const telephone = document.getElementById('telephone').value.trim();
-        const email = document.getElementById('email').value.trim() || null;
+        const email = document.getElementById('email').value.trim();
         const mot_de_passe = document.getElementById('mot_de_passe').value.trim();
         const errorDiv = document.getElementById('error-message');
         errorDiv.textContent = "";
 
         try {
-            // Insertion dans la table 'utilisateurs'
             const { data, error } = await _supabase
                 .from('utilisateurs')
-                .insert([{ nom, telephone, email, mot_de_passe }]);
+                .insert([{ nom: nom, telephone: telephone, email: email, mot_de_passe: mot_de_passe }]);
 
             if (error) {
                 throw error;
@@ -163,24 +127,15 @@
             errorDiv.style.color = "green";
             errorDiv.textContent = "Inscription réussie ! Redirection...";
 
-            // Redirection vers la page d'accueil en cas de succès
             setTimeout(() => {
                 window.location.href = 'accueil.html';
             }, 1000);
             
         } catch (err) {
             console.error("Erreur d'inscription :", err.message);
-            errorDiv.style.color = "#e74c3c";
+            errorDiv.style.color = "#ce1126";
             errorDiv.textContent = "Erreur : " + (err.message || "Impossible de s'inscrire.");
         }
-    });
-
-    document.getElementById('btn-google').addEventListener('click', () => {
-        alert("La connexion Google sera effective une fois configurée dans Supabase Auth.");
-    });
-
-    document.getElementById('btn-facebook').addEventListener('click', () => {
-        alert("La connexion Facebook sera effective une fois configurée dans Supabase Auth.");
     });
 </script>
 
