@@ -55,11 +55,59 @@
     </header>
 
     <div class="container">
-        <h2>Les dernières annonces</h2>
+        <h2>Les derniers utilisateurs inscrits / Annonces</h2>
         <div id="liste-annonces">
-            <p>Chargement des annonces en cours...</p>
+            <p>Chargement en cours...</p>
         </div>
     </div>
 
+    <script>
+        // Remplace par tes propres clés Supabase (les mêmes que dans ton index.html)
+        const SUPABASE_URL = 'https://ylrqruogetpbvyfditjt.supabase.co'
+        const SUPABASE_ANON_KEY = 'TA_CLE_ANON_SUPABASE' 
+
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+
+        async function chargerAnnonces() {
+            const conteneur = document.getElementById('liste-annonces')
+            
+            // On récupère les données de la table utilisateurs (ou de ta future table d'annonces)
+            const { data, error } = await _supabase
+                .from('utilisateurs')
+                .select('*')
+                .order('created_at', { ascending: false })
+
+            if (error) {
+                conteneur.innerHTML = '<p style="color: red;">Erreur lors du chargement des données.</p>'
+                console.error(error)
+                return
+            }
+
+            if (data.length === 0) {
+                conteneur.innerHTML = '<p>Aucune donnée pour le moment.</p>'
+                return
+            }
+
+            conteneur.innerHTML = ''
+            data.forEach(item => {
+                const card = document.createElement('div')
+                card.className = 'annonce-card'
+                card.innerHTML = `
+                    <h3>Inscrit : ${item.nom || 'Anonyme'}</h3>
+                    <p>Téléphone : ${item.telephone || 'Non renseigné'}</p>
+                    <button class="btn" onclick="verifierInteraction()">Acheter / Contacter</button>
+                `
+                conteneur.appendChild(card)
+            })
+        }
+
+        // Fonction pour bloquer l'interaction si l'utilisateur veut acheter/vendre
+        function verifierInteraction() {
+            alert("Vous devez être connecté pour effectuer cette action !");
+            window.location.href = 'index.html';
+        }
+
+        chargerAnnonces()
+    </script>
 </body>
 </html>
