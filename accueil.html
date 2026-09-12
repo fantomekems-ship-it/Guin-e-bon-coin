@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guinée Bon Coin - Accueil</title>
+    <!-- Importation de Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #ff6600;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        .annonce-card {
+            background: white;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .btn {
+            background-color: #ff6600;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .btn:hover {
+            background-color: #e55b00;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h2>Guinée Bon Coin</h2>
+        <a href="index.html" class="btn">S'inscrire / Connexion</a>
+    </header>
+
+    <div class="container">
+        <h2>Les dernières annonces</h2>
+        <div id="liste-annonces">
+            <p>Chargement des annonces en cours...</p>
+        </div>
+    </div>
+
+</body>
+</html>
