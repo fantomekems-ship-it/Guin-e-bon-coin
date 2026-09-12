@@ -141,3 +141,147 @@
 
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guinée Bon Coin - Inscription</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background-color: #faf8f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .card {
+            background: #ffffff;
+            padding: 30px 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border-top: 5px solid #ce1126;
+            border-bottom: 5px solid #009460;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        h2 { color: #333; margin-bottom: 5px; }
+        p.subtitle { color: #666; font-size: 14px; margin-bottom: 20px; }
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+            font-size: 14px;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        .btn-submit {
+            width: 100%;
+            padding: 12px;
+            background-color: #009460;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .btn-submit:hover { background-color: #007a4d; }
+        #error-message {
+            margin-top: 15px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Guinée Bon Coin</h2>
+    <p class="subtitle">Achetez et vendez en toute simplicité</p>
+    
+    <form id="signup-form">
+        <div class="input-group">
+            <label for="nom">Nom d'utilisateur</label>
+            <input type="text" id="nom" required placeholder="Votre nom complet">
+        </div>
+        <div class="input-group">
+            <label for="telephone">Numéro de téléphone</label>
+            <input type="tel" id="telephone" required placeholder="Ex: +224...">
+        </div>
+        <div class="input-group">
+            <label for="email">Adresse Email</label>
+            <input type="email" id="email" required placeholder="votre@email.com">
+        </div>
+        <div class="input-group">
+            <label for="mot_de_passe">Mot de passe</label>
+            <input type="password" id="mot_de_passe" required placeholder="••••••••">
+        </div>
+        <button type="submit" class="btn-submit">Créer mon compte</button>
+    </form>
+
+    <div id="error-message"></div>
+</div>
+
+<script>
+    // URL exacte de ton projet Supabase et ta nouvelle clé Publishable
+    const SUPABASE_URL = 'https://fantomekems.supabase.co';
+    const SUPABASE_ANON_KEY = 'Sb_publishable_12Iq5_yhPziBBV3CdxjgqA_AzUOskcd';
+
+    const { createClient } = supabase;
+    const _supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    document.getElementById('signup-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const nom = document.getElementById('nom').value.trim();
+        const telephone = document.getElementById('telephone').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const mot_de_passe = document.getElementById('mot_de_passe').value.trim();
+        const errorDiv = document.getElementById('error-message');
+        errorDiv.textContent = "";
+
+        try {
+            const { data, error } = await _supabase
+                .from('utilisateurs')
+                .insert([{ nom: nom, telephone: telephone, email: email, mot_de_passe: mot_de_passe }]);
+
+            if (error) {
+                throw error;
+            }
+
+            errorDiv.style.color = "green";
+            errorDiv.textContent = "Inscription réussie ! Redirection...";
+
+            setTimeout(() => {
+                window.location.href = 'accueil.html';
+            }, 1000);
+            
+        } catch (err) {
+            console.error("Erreur d'inscription :", err.message);
+            errorDiv.style.color = "#ce1126";
+            errorDiv.textContent = "Erreur : " + (err.message || "Impossible de s'inscrire.");
+        }
+    });
+</script>
+
+</body>
+</html>
+
