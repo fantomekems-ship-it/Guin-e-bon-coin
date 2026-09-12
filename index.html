@@ -12,7 +12,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
         }
         .form-container {
@@ -45,8 +45,48 @@
             border-radius: 5px;
             font-size: 16px;
             cursor: pointer;
+            margin-top: 5px;
         }
         .btn:hover { background-color: #e55b00; }
+        
+        .separator {
+            text-align: center;
+            margin: 20px 0;
+            position: relative;
+            color: #666;
+            font-size: 14px;
+        }
+        .separator::before, .separator::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            width: 40%;
+            height: 1px;
+            background: #ddd;
+        }
+        .separator::before { left: 0; }
+        .separator::after { right: 0; }
+
+        .btn-social {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            background: white;
+        }
+        .btn-google { color: #db4437; }
+        .btn-google:hover { background: #fdf2f2; }
+        .btn-facebook { color: #4267B2; }
+        .btn-facebook:hover { background: #f0f4f9; }
+
         #message { text-align: center; margin-top: 15px; font-weight: bold; }
     </style>
 </head>
@@ -54,6 +94,8 @@
 
     <div class="form-container">
         <h2>Guinée Bon Coin</h2>
+        
+        <!-- Formulaire classique -->
         <form id="inscriptionForm">
             <div class="input-group">
                 <label for="nom">Nom d'utilisateur :</label>
@@ -77,6 +119,17 @@
 
             <button type="submit" class="btn" id="submitBtn">S'inscrire</button>
         </form>
+
+        <div class="separator">OU</div>
+
+        <!-- Boutons Sociaux -->
+        <button type="button" class="btn-social btn-google" onclick="connexionSociale('Google')">
+            <span>🌐</span> Continuer avec Google
+        </button>
+        <button type="button" class="btn-social btn-facebook" onclick="connexionSociale('Facebook')">
+            <span>📘</span> Continuer avec Facebook
+        </button>
+
         <div id="message"></div>
     </div>
 
@@ -87,7 +140,6 @@
 
         const form = document.getElementById('inscriptionForm')
         const messageDiv = document.getElementById('message')
-        const submitBtn = document.getElementById('submitBtn')
 
         // Gestion du blocage des 3 tentatives (2 heures)
         function verifierBlocage() {
@@ -110,6 +162,7 @@
 
         verifierBlocage()
 
+        // Inscription classique
         form.addEventListener('submit', async (e) => {
             e.preventDefault()
 
@@ -117,44 +170,67 @@
 
             const nom = document.getElementById('nom').value.trim()
             const telephone = document.getElementById('telephone').value.trim()
-            const email = document.getElementById('email').value.trim() || null // Si vide, envoie "null"
+            const email = document.getElementById('email').value.trim() || null
             const password = document.getElementById('password').value.trim()
 
-            // Vérification stricte du numéro de téléphone (minimum 9 chiffres)
             const telephoneNettoye = telephone.replace(/\s+/g, '')
             if (telephoneNettoye.length < 9) {
                 gererEchec("Erreur : Numéro de téléphone invalide (9 chiffres minimum).")
                 return
             }
 
-            // Envoi vers Supabase
-            const { data, error } = await _supabase
+            const { error } = await _supabase
                 .from('utilisateurs')
-                .insert([
-                    { 
-                        nom: nom, 
-                        telephone: telephone, 
-                        email: email, 
-                        mot_de_passe: password 
-                    }
-                ])
+                .insert([{ nom: nom, telephone: telephone, email: email, mot_de_passe: password }])
 
             if (error) {
                 console.error("Erreur:", error)
                 gererEchec("Erreur lors de l'inscription : " + error.message)
             } else {
-                localStorage.removeItem('tentatives')
-                localStorage.removeItem('blocage_fin')
-
-                messageDiv.style.color = 'green'
-                messageDiv.textContent = 'Inscription réussie ! Redirection...'
-                form.reset()
-                
-                setTimeout(() => {
-                    window.location.href = 'accueil.html'
-                }, 1000)
+                succesInscription()
             }
         })
+
+        // Connexion sociale (Google / Facebook)
+        async function connexionSociale(plateforme) {
+            if (verifierBlocage()) return
+
+            const nomSocial = prompt(`Entrez votre nom pour la connexion ${plateforme} :`)
+            if (!nomSocial) return
+
+            const telephoneSocial = prompt("Entrez votre numéro de téléphone (ex: +224...) :")
+            if (!telephoneSocial) return
+
+            const telNettoye = telephoneSocial.replace(/\s+/g, '')
+            if (telNettoye.length < 9) {
+                alert("Numéro de téléphone invalide (9 chiffres minimum).")
+                gererEchec("Numéro social invalide")
+                return
+            }
+
+            const { error } = await _supabase
+                .from('utilisateurs')
+                .insert([{ nom: `${nomSocial} (${plateforme})`, telephone: telephoneSocial, mot_de_passe: 'SOCIAL_LOGIN' }])
+
+            if (error) {
+                alert("Erreur lors de la connexion : " + error.message)
+            } else {
+                succesInscription()
+            }
+        }
+
+        function succesInscription() {
+            localStorage.removeItem('tentatives')
+            localStorage.removeItem('blocage_fin')
+
+            messageDiv.style.color = 'green'
+            messageDiv.textContent = 'Connexion réussie ! Redirection...'
+            form.reset()
+            
+            setTimeout(() => {
+                window.location.href = 'accueil.html'
+            }, 1000)
+        }
 
         function gererEchec(messageTexte) {
             messageDiv.style.color = 'red'
@@ -173,104 +249,5 @@
             }
         }
     </script>
-</body>
-</html>
-            font-weight: bold;
-            color: #333;
-        }
-        input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 16px;
-            box-sizing: border-box;
-        }
-        button {
-            width: 100%;
-            padding: 12px;
-            background-color: #ff6600;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-        button:hover {
-            background-color: #e55c00;
-        }
-        #message {
-            text-align: center;
-            margin-top: 15px;
-            font-weight: bold;
-        }
-    </style>
-</head>
-<body>
-
-    <div class="card">
-        <h2>Guinée Bon Coin</h2>
-        <form id="signupForm">
-            <div class="form-group">
-                <label for="nom">Nom complet :</label>
-                <input type="text" id="nom" required placeholder="Ex: Mamadou Diallo">
-            </div>
-            
-            <div class="form-group">
-                <label for="telephone">Numéro de téléphone :</label>
-                <input type="tel" id="telephone" required placeholder="Ex: +224 620 00 00 00">
-            </div>
-
-            <button type="submit">S'inscrire</button>
-        </form>
-        <div id="message"></div>
-    </div>
-
-    <!-- Script de connexion Supabase -->
-    <script type="module">
-        import { createClient } from 'https://esm.sh/@supabase/supabase-js'
-
-        // Tes identifiants Supabase configurés
-        const supabaseUrl = 'https://ylrqruogetpbvyfditjt.supabase.co'
-        const supabaseKey = 'sb_publishable_12Iq5_yhPziBBV3CdxjgqA_AzUOskcd'
-        const supabase = createClient(supabaseUrl, supabaseKey)
-
-        const form = document.getElementById('signupForm')
-        const messageDiv = document.getElementById('message')
-
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault()
-            
-            const nom = document.getElementById('nom').value
-            const telephone = document.getElementById('telephone').value
-
-            messageDiv.style.color = '#333'
-            messageDiv.textContent = 'Enregistrement en cours...'
-
-            const { data, error } = await supabase
-                .from('utilisateurs')
-                .insert([{ nom: nom, telephone: telephone }])
-
-                        if (error) {
-                console.error("Erreur:", error)
-                messageDiv.style.color = 'red'
-                messageDiv.textContent = 'Erreur : ' + error.message
-            } else {
-                messageDiv.style.color = 'green'
-                messageDiv.textContent = 'Inscription réussie ! Redirection...'
-                form.reset()
-                
-                // Redirection automatique vers la page d'accueil après 1 seconde
-                setTimeout(() => {
-                    window.location.href = 'accueil.html'
-                }, 1000)
-            }
-
-            }
-        })
-    </script>
-
 </body>
 </html>
