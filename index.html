@@ -17,7 +17,7 @@
         }
         .card {
             background: #ffffff;
-            padding: 30px 20px;
+            padding: 30px;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             border-top: 5px solid #ce1126;
@@ -59,7 +59,7 @@
             cursor: pointer;
             margin-top: 10px;
         }
-        .btn-submit:hover { background-color: #007a4e; }
+        .btn-submit:hover { background-color: #007a40; }
         #error-message {
             margin-top: 15px;
             font-size: 14px;
@@ -80,7 +80,7 @@
         </div>
         <div class="input-group">
             <label for="telephone">Numéro de téléphone</label>
-            <input type="tel" id="telephone" required placeholder="Ex: +224...">
+            <input type="tel" id="telephone" required placeholder="Ex: +224 ...">
         </div>
         <div class="input-group">
             <label for="email">Adresse Email</label>
@@ -97,14 +97,8 @@
 </div>
 
 <script>
-        const SUPABASE_URL = "https://" + 
-                         "ylrqruogetpbvyfditjt" + 
-                         ".supabase.co";
-
-    const SUPABASE_ANON_KEY = "Sb_publishable_12Iq5_" + 
-                              "yhPziBBV3CdxjgqA_" + 
-                              "AzUOskcd";
-
+    const SUPABASE_URL = "https://" + "ylrqruogetpbvyfditjt" + ".supabase.co";
+    const SUPABASE_ANON_KEY = "Sb_publishable_12Iq5_" + "yhPziBBV3CdxjgqA_" + "AzUOskcd";
 
     const { createClient } = supabase;
     const _supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -122,11 +116,11 @@
         try {
             const { data, error } = await _supabase
                 .from('utilisateurs')
-                .insert([{ 
-                    nom: nom, 
-                    telephone: telephone, 
-                    email: email, 
-                    mot_de_passe: mot_de_passe 
+                .insert([{
+                    nom: nom,
+                    telephone: telephone,
+                    email: email,
+                    mot_de_passe: mot_de_passe
                 }]);
 
             if (error) {
@@ -138,15 +132,16 @@
 
             setTimeout(() => {
                 window.location.href = "accueil.html";
-            }, 1000);
+            }, 1500);
 
         } catch (err) {
             console.error("Erreur d'inscription :", err);
             errorDiv.style.color = "#ce1126";
-            errorDiv.textContent = "Erreur : " + (err.message || "Impossible de s'inscrire.");
+            errorDiv.textContent = "Erreur : " + (err.message || "Impossible de s'inscrire");
         }
     });
 </script>
 
 </body>
 </html>
+
