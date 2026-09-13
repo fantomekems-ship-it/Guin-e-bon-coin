@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Guinée Bon Coin - Inscription</title>
+    <!-- Chargement de la bibliothèque Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         body {
@@ -20,8 +21,8 @@
             padding: 30px 20px;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            border-top: 5px solid #ce1126;
-            border-bottom: 5px solid #009460;
+            border-top: 5px solid #ce1126; /* Rouge Guinée */
+            border-bottom: 5px solid #009460; /* Vert Guinée */
             width: 100%;
             max-width: 400px;
             text-align: center;
@@ -94,7 +95,10 @@
     </form>
 
     <div id="error-message"></div>
-</div><script>
+</div>
+
+<script>
+    // Configuration de ton projet Supabase
     const SUPABASE_URL = 'https://ylrqruogetpbvyfditjt.supabase.co';
     const SUPABASE_ANON_KEY = 'Sb_publishable_12Iq5_zhPii08V3CdbjgqA_AnD5kCd';
 
@@ -112,6 +116,7 @@
         errorDiv.textContent = "";
 
         try {
+            // Insertion des données dans la table 'utilisateurs'
             const { data, error } = await _supabase
                 .from('utilisateurs')
                 .insert([{ nom: nom, telephone: telephone, email: email, mot_de_passe: mot_de_passe }]);
@@ -120,8 +125,9 @@
                 throw error;
             }
 
-            errorDiv.style.color = "green";
-            errorDiv.textContent = "Inscription réussie ! Redirection...";
+            // Succès : Affichage du message vert et redirection automatique vers l'accueil
+            errorDiv.style.color = "#009460";
+            errorDiv.textContent = "Inscription réussie ! Redirection en cours...";
 
             setTimeout(() => {
                 window.location.href = "accueil.html";
@@ -137,4 +143,3 @@
 
 </body>
 </html>
-
