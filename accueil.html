@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Guinée Bon Coin - Accueil</title>
-    <!-- Importation de Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         body {
@@ -62,52 +61,49 @@
     </div>
 
     <script>
-        // Tes vraies clés Supabase
-        const SUPABASE_URL = 'https://ylrqruogetpbvyfditjt.supabase.co'
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlscXJ1b2dldHBidnlmZGl0anQiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTczODE0MzE4NCwiZXhwIjoyMDUzNzE5MTg0fQ.YOUR_SECRET_KEY_PART' // (Mets ici ta longue clé complète exacte de ton index.html)
+        const SUPABASE_URL = 'https://ylrqruogetpbvyfditjt.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_12Iq5_yhPziBBV3CdxjgqA_AzUOskcd';
 
-        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         async function chargerAnnonces() {
-            const conteneur = document.getElementById('liste-annonces')
+            const conteneur = document.getElementById('liste-annonces');
             
-            // On récupère les données de la table utilisateurs
             const { data, error } = await _supabase
                 .from('utilisateurs')
                 .select('*')
-                .order('created_at', { ascending: false })
+                .order('created_at', { ascending: false });
 
             if (error) {
-                conteneur.innerHTML = '<p style="color: red;">Erreur lors du chargement des données.</p>'
-                console.error(error)
-                return
+                conteneur.innerHTML = '<p style="color: red;">Erreur lors du chargement des données.</p>';
+                console.error(error);
+                return;
             }
 
-            if (data.length === 0) {
-                conteneur.innerHTML = '<p>Aucune donnée pour le moment.</p>'
-                return
+            if (!data || data.length === 0) {
+                conteneur.innerHTML = '<p>Aucune donnée pour le moment.</p>';
+                return;
             }
 
-            conteneur.innerHTML = ''
+            conteneur.innerHTML = '';
             data.forEach(item => {
-                const card = document.createElement('div')
-                card.className = 'annonce-card'
+                const card = document.createElement('div');
+                card.className = 'annonce-card';
                 card.innerHTML = `
                     <h3>Inscrit : ${item.nom || 'Anonyme'}</h3>
                     <p>Téléphone : ${item.telephone || 'Non renseigné'}</p>
                     <button class="btn" onclick="verifierInteraction()">Acheter / Contacter</button>
-                `
-                conteneur.appendChild(card)
-            })
+                `;
+                conteneur.appendChild(card);
+            });
         }
 
-        // Fonction pour bloquer l'interaction si l'utilisateur veut acheter/vendre sans compte
         function verifierInteraction() {
             alert("Vous devez être connecté pour effectuer cette action !");
             window.location.href = 'index.html';
         }
 
-        chargerAnnonces()
+        chargerAnnonces();
     </script>
 </body>
 </html>
