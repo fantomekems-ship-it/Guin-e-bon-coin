@@ -25,12 +25,29 @@
             margin: 20px auto;
             padding: 20px;
         }
-        .annonce-card {
+        .form-box, .annonce-card {
             background: white;
             padding: 20px;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .form-box h3, .container h2 {
+            margin-top: 0;
+            color: #333;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0 15px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        textarea {
+            resize: vertical;
+            height: 80px;
         }
         .annonce-card h3 {
             margin-top: 0;
@@ -50,13 +67,13 @@
             cursor: pointer;
             text-decoration: none;
             display: inline-block;
-            margin-top: 5px;
         }
         .btn:hover {
             background-color: #e55b00;
         }
         .btn-like {
             background-color: #ff4757;
+            margin-top: 5px;
         }
         .btn-like:hover {
             background-color: #ff6b81;
@@ -78,6 +95,26 @@
     </header>
 
     <div class="container">
+        <!-- Formulaire de publication -->
+        <div class="form-box">
+            <h3>Déposer une nouvelle annonce</h3>
+            <form id="form-annonce">
+                <label>Titre de l'annonce</label>
+                <input type="text" id="titre" placeholder="Ex: Téléphone, Voiture, Ordinateur..." required>
+
+                <label>Description</label>
+                <textarea id="description" placeholder="Décrivez votre article en détail..." required></textarea>
+
+                <label>Prix (en GNF)</label>
+                <input type="text" id="prix" placeholder="Ex: 1500000" required>
+
+                <label>Votre nom / Vendeur</label>
+                <input type="text" id="vendeur" placeholder="Ex: Wintech Factory" required>
+
+                <button type="submit" class="btn">Publier l'annonce</button>
+            </form>
+        </div>
+
         <h2>Les dernières petites annonces</h2>
         <div id="liste-annonces">
             <p>Chargement des annonces en cours...</p>
@@ -89,6 +126,7 @@
         const SUPABASE_ANON_KEY = 'sb_publishable_12Iq5_yhPziBBV3CdxjgqA_AzUOskcd';
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+        // Charger les annonces au démarrage
         async function chargerAnnonces() {
             const conteneur = document.getElementById('liste-annonces');
             
@@ -104,7 +142,7 @@
             }
 
             if (!data || data.length === 0) {
-                conteneur.innerHTML = '<p>Aucune annonce pour le moment. Allez dans Supabase pour ajouter votre première annonce test !</p>';
+                conteneur.innerHTML = '<p>Aucune annonce pour le moment. Soyez le premier à en publier une via le formulaire ci-dessus !</p>';
                 return;
             }
 
@@ -118,13 +156,37 @@
                     <p class="prix">Prix : ${item.prix ? item.prix + ' GNF' : 'Prix non spécifié'}</p>
                     <p style="font-size: 0.9em; color: #666;">Vendeur : ${item.vendeur || 'Anonyme'}</p>
                     <button class="btn btn-like" onclick="aimerAnnonce(${item.id}, ${item.likes || 0})">❤️ J'aime (${item.likes || 0})</button>
-                    <br>
+                    <br><br>
                     <a href="chat.html" class="btn">Contacter le vendeur</a>
                 `;
                 conteneur.appendChild(card);
             });
         }
 
+        // Gérer l'envoi du formulaire de publication
+        document.getElementById('form-annonce').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const titre = document.getElementById('titre').value;
+            const description = document.getElementById('description').value;
+            const prix = document.getElementById('prix').value;
+            const vendeur = document.getElementById('vendeur').value;
+
+            const { error } = await _supabase
+                .from('annonces')
+                .insert([{ titre, description, prix, vendeur, likes: 0 }]);
+
+            if (error) {
+                alert("Erreur lors de la publication de l'annonce.");
+                console.error(error);
+            } else {
+                alert("Annonce publiée avec succès !");
+                document.getElementById('form-annonce').reset(); // Vider le formulaire
+                chargerAnnonces(); // Rafraîchir la liste instantanément
+            }
+        });
+
+        // Gérer les likes
         async function aimerAnnonce(idAnnonce, likesActuels) {
             const nouveauTotal = likesActuels + 1;
 
@@ -137,7 +199,6 @@
                 alert("Erreur lors du like");
                 console.error(error);
             } else {
-                // Recharger les annonces pour actualiser le compteur à l'écran
                 chargerAnnonces();
             }
         }
